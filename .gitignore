@@ -1,0 +1,16 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.venv312/
+
+# Local media and generated outputs
+demo/
+results/
+output_example/
+data/*.mp4
+
+# Keep the folders in the repo if you want empty placeholders later
+!demo/.gitkeep
+!results/.gitkeep
+!data/.gitkeep
