@@ -4,7 +4,7 @@
 
 A computer vision project for analyzing cello bowing motion, posture, and early technique signals using OpenCV, MediaPipe, and Python.
 
-![Bow analysis sample](docs/assets/bow_metrics_sample.jpg)
+<img src="docs/assets/bow_metrics_demo.gif" alt="Bow analysis demo" width="480" />
 
 ## Why this project matters
 
@@ -133,7 +133,7 @@ if shoulder_baseline_y is None:
 shoulder_elevation = max(0.0, shoulder_baseline_y - shoulder.y)
 ```
 
-![Shoulder posture sample](docs/assets/posture_sample.jpg)
+<img src="docs/assets/posture_sample.jpg" alt="Shoulder posture sample" width="480" />
 
 ### Bow-arm angle
 
@@ -156,7 +156,7 @@ angle_error_deg = abs(((angle_deg + 90.0) % 180.0) - 90.0)
 
 That `angle_error_deg` term is the absolute deviation from a flatter reference direction.
 
-![Combined bow and posture sample](docs/assets/combined_sample.jpg)
+<img src="docs/assets/combined_sample.jpg" alt="Combined bow and posture sample" width="480" />
 
 ### Wrist path
 
@@ -178,7 +178,7 @@ if contact_baseline_y is None:
 contact_drift = contact_y - contact_baseline_y
 ```
 
-![Bow contact-point and drift sample](docs/assets/bow_metrics_sample.jpg)
+<img src="docs/assets/bow_metrics_sample.jpg" alt="Bow contact-point and drift sample" width="480" />
 
 ### Motion smoothness
 
