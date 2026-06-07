@@ -156,22 +156,11 @@ The current desktop IMU viewer provides a live 3D acceleration-space visualizati
 
 ## Current prototype hardware
 
-The current bow-mounted IMU prototype uses:
-
-- `GY-85 BMP085 Sensor Modules 9 Axis Sensor Module (ITG3205 + ADXL345 + HMC5883L), 6DOF/9DOF IMU Sensor`
-  - Approx. price noted: `$4.38`
-  - Note: requires soldering
-  - Link: [AliExpress listing](https://www.aliexpress.us/item/3256803649766316.html?spm=a2g0o.order_list.order_list_main.22.51f618027m97bX&gatewayAdapt=glo2usa)
-
-- `2pcs ESP32C3 Supermini Development Board`
-  - Approx. price noted: `$5.49` for two pieces
-  - Note: requires soldering
-  - Link: [Temu listing](https://www.temu.com/goods.html?_bg_fs=1&goods_id=606169150155587&parent_order_sn=PO-211-06234479867513254&_oak_order_sn=211-06234534917753254&_oak_goods_num=1&sku_id=88630542522956&_x_sessn_id=4sl5sdt1i6&refer_page_name=bgt_order_detail&refer_page_id=10045_1780840080033_b6qkacfibg&refer_page_sn=10045)
-
-- `WEP 926LED V3 Soldering Station 130W MAX Soldering Iron Kit`
-  - Approx. price noted: `$29.99`
-  - Includes solder wire, 5 soldering tips, tweezers, solder sucker, tip cleaner, temperature control, sleep mode, and C/F conversion
-  - Link: [Amazon listing](https://www.amazon.com/dp/B0BX2N258S?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_3)
+| Component | Notes | Approx. price | Source |
+|---|---|---:|---|
+| `GY-85 BMP085 Sensor Modules 9 Axis Sensor Module (ITG3205 + ADXL345 + HMC5883L), 6DOF/9DOF IMU Sensor` | Bow-mounted IMU, requires soldering | `$4.38` | [AliExpress](https://www.aliexpress.us/item/3256803649766316.html?spm=a2g0o.order_list.order_list_main.22.51f618027m97bX&gatewayAdapt=glo2usa) |
+| `2pcs ESP32C3 Supermini Development Board` | Microcontroller board, requires soldering | `$5.49` for two pieces | [Temu](https://www.temu.com/goods.html?_bg_fs=1&goods_id=606169150155587&parent_order_sn=PO-211-06234479867513254&_oak_order_sn=211-06234534917753254&_oak_goods_num=1&sku_id=88630542522956&_x_sessn_id=4sl5sdt1i6&refer_page_name=bgt_order_detail&refer_page_id=10045_1780840080033_b6qkacfibg&refer_page_sn=10045) |
+| `WEP 926LED V3 Soldering Station 130W MAX Soldering Iron Kit` | Includes solder wire, 5 tips, tweezers, solder sucker, tip cleaner, temperature control, sleep mode, and C/F conversion | `$29.99` | [Amazon](https://www.amazon.com/dp/B0BX2N258S?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_3) |
 
 ## Example outputs
 
