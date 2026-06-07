@@ -103,7 +103,7 @@ The optional IMU hardware path is set up for PlatformIO. The repository uses:
 - `src/main.py` for the Python camera tracker
 - `src/main.cpp` for the ESP32 firmware logger
 
-The checked-in PlatformIO configuration is [platformio.ini](platformio.ini:1).
+The checked-in PlatformIO configuration is [platformio.ini](platformio.ini).
 
 ## Python compatibility
 
@@ -148,7 +148,7 @@ The core repository is intentionally camera-first and works without any speciali
 - bow roll and angular velocity from the IMU
 - motion smoothness or jerk signals from the IMU
 
-For the current hardware plan, recommended sensors, starter wiring, serial data format, and development notes, see [docs/imu_esp32_extension.md](docs/imu_esp32_extension.md:1). The current ADXL345 logger sketch is checked in at [docs/esp32_gy85_accel_logger.ino](docs/esp32_gy85_accel_logger.ino:1), and the matching desktop serial viewer lives at [src/bowtracker_desktop.py](src/bowtracker_desktop.py:1).
+For the current hardware plan, recommended sensors, starter wiring, serial data format, and development notes, see [docs/imu_esp32_extension.md](docs/imu_esp32_extension.md). The current ADXL345 logger sketch is checked in at [docs/esp32_gy85_accel_logger.ino](docs/esp32_gy85_accel_logger.ino), and the matching desktop serial viewer lives at [src/bowtracker_desktop.py](src/bowtracker_desktop.py).
 
 For PlatformIO users, the firmware entry point is [src/main.cpp](src/main.cpp:1).
 
