@@ -150,7 +150,7 @@ The core repository is intentionally camera-first and works without any speciali
 
 For the current hardware plan, recommended sensors, starter wiring, serial data format, and development notes, see [docs/imu_esp32_extension.md](docs/imu_esp32_extension.md). The current ADXL345 logger sketch is checked in at [docs/esp32_gy85_accel_logger.ino](docs/esp32_gy85_accel_logger.ino), and the matching desktop serial viewer lives at [src/bowtracker_desktop.py](src/bowtracker_desktop.py).
 
-For PlatformIO users, the firmware entry point is [src/main.cpp](src/main.cpp:1).
+For PlatformIO users, the firmware entry point is [src/main.cpp](src/main.cpp).
 
 The current desktop IMU viewer provides a live 3D acceleration-space visualization. In other words, it shows the changing `ax`, `ay`, and `az` vector in 3D, which is useful for motion intensity and directional changes. It is not yet a full reconstructed 3D bow-position tracker.
 
