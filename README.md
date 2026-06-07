@@ -1,6 +1,6 @@
 # Cello Bow Motion Tracker
 
-`OpenCV` · `MediaPipe` · `Pose Tracking` · `Bow Tracking` · `Technique Feedback` · `Computer Vision` · `Python`
+`OpenCV` · `MediaPipe` · `Pose Tracking` · `Bow Tracking` · `IMU Sensor Fusion` · `Computer Vision` · `ESP32` · `Embedded Systems`
 
 A computer vision project for analyzing cello bowing motion, posture, and early technique signals using OpenCV, MediaPipe, and Python.
 
