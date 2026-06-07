@@ -6,6 +6,11 @@ A computer vision project for analyzing cello bowing motion, posture, and early 
 
 <img src="docs/assets/bow_metrics_demo.gif" alt="Bow analysis demo" width="480" />
 
+Early IMU + ESP32 hardware prototype:
+
+<img src="docs/assets/prototype%20side.jpeg" alt="BowTrack IMU prototype side view" width="480" />
+<img src="docs/assets/prototype_back.jpeg" alt="BowTrack IMU prototype back view" width="480" />
+
 ## Why this project matters
 
 Beginner and intermediate string players often raise the bow-side shoulder, stiffen the wrist, or let the bow drift away from a straight stroke without realizing it. This project turns those issues into measurable motion metrics and visual feedback.
@@ -15,7 +20,8 @@ The result is more than a webcam demo:
 - computer vision for human movement tracking
 - geometry-based technique metrics
 - musician-focused feedback loops
-- a clear path to real-time or embedded deployment later
+- a clean path to real-time or embedded deployment
+- an optional IMU extension path for sensor fusion
 
 ## Features in this first version
 
@@ -37,6 +43,7 @@ The result is more than a webcam demo:
 - add posture or technique scoring
 - compare a student recording against a reference performance
 - optionally deploy on Jetson with low-latency camera capture
+- add an ESP32 + IMU hardware path for orientation and smoothness sensing
 
 ## Project structure
 
@@ -44,19 +51,27 @@ The result is more than a webcam demo:
 cello-bow-motion-tracker/
 ├── README.md
 ├── requirements.txt
+├── platformio.ini
 ├── data/
 │   └── .gitkeep
 ├── demo/
 │   └── .gitkeep
 ├── docs/
-│   └── assets/
+│   ├── assets/
 │       ├── bow_metrics_sample.jpg
 │       ├── combined_sample.jpg
-│       └── posture_sample.jpg
+│       ├── posture_fallback_demo.gif
+│       ├── posture_sample.jpg
+│       ├── prototype side.jpeg
+│       └── prototype_back.jpeg
+│   ├── esp32_gy85_accel_logger.ino
+│   └── imu_esp32_extension.md
 ├── results/
 │   └── .gitkeep
 └── src/
     ├── clip_analyzer.py
+    ├── bowtracker_desktop.py
+    ├── main.cpp
     ├── main.py
     ├── bow_detector.py
     ├── metrics.py
@@ -72,11 +87,31 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Desktop GUI setup on macOS:
+
+```bash
+python3.12 -m venv .venv312_gui
+source .venv312_gui/bin/activate
+pip install PySide6 pyqtgraph pyserial numpy PyOpenGL PyOpenGL_accelerate
+python3 src/bowtracker_desktop.py
+```
+
+## Firmware setup
+
+The optional IMU hardware path is set up for PlatformIO. The repository uses:
+
+- `src/main.py` for the Python camera tracker
+- `src/main.cpp` for the ESP32 firmware logger
+
+The checked-in PlatformIO configuration is [platformio.ini](/Users/harvardsummer/Library/Mobile%20Documents/com~apple~CloudDocs/GitHub/BowTrack/platformio.ini:1).
+
 ## Python compatibility
 
 This prototype currently targets the classic MediaPipe `solutions` API. In practice, that means Python `3.10` to `3.12` is the safest choice for local development right now.
 
 On Python `3.14`, `pip install mediapipe` currently provides the newer Tasks-oriented package layout in this environment, which does not expose `mediapipe.solutions` and will prevent the tracker from starting.
+
+For the desktop IMU viewer on macOS, `Python 3.12` is also the recommended choice because the `PySide6` GUI stack is more reliable there than on `Python 3.14`.
 
 ## Usage
 
@@ -104,12 +139,27 @@ Force a specific analysis mode:
 python3 src/clip_analyzer.py --input path/to/clip.mp4 --out-dir results/clip_run --mode combined
 ```
 
+## Optional IMU extension
+
+The core repository is intentionally camera-first and works without any specialized hardware. A natural next step is an optional bow-mounted IMU path using an `ESP32-C3 SuperMini` and a small inertial sensor so the project can combine:
+
+- bow angle and bridge offset from video
+- shoulder/posture fallback from video
+- bow roll and angular velocity from the IMU
+- motion smoothness or jerk signals from the IMU
+
+For the current hardware plan, recommended sensors, starter wiring, serial data format, and development notes, see [docs/imu_esp32_extension.md](/Users/harvardsummer/Library/Mobile%20Documents/com~apple~CloudDocs/GitHub/BowTrack/docs/imu_esp32_extension.md:1). The current ADXL345 logger sketch is checked in at [docs/esp32_gy85_accel_logger.ino](/Users/harvardsummer/Library/Mobile%20Documents/com~apple~CloudDocs/GitHub/BowTrack/docs/esp32_gy85_accel_logger.ino:1), and the matching desktop serial viewer lives at [src/bowtracker_desktop.py](/Users/harvardsummer/Library/Mobile%20Documents/com~apple~CloudDocs/GitHub/BowTrack/src/bowtracker_desktop.py:1).
+
+For PlatformIO users, the firmware entry point is [src/main.cpp](/Users/harvardsummer/Library/Mobile%20Documents/com~apple~CloudDocs/GitHub/BowTrack/src/main.cpp:1).
+
+The current desktop IMU viewer provides a live 3D acceleration-space visualization. In other words, it shows the changing `ax`, `ay`, and `az` vector in 3D, which is useful for motion intensity and directional changes. It is not yet a full reconstructed 3D bow-position tracker.
+
 ## Example outputs
 
 The repository includes lightweight sample frames that show how the analyzer adapts to different camera angles and visible technique cues.
 
 - `docs/assets/bow_metrics_sample.jpg`: bow-angle, bridge-offset, contact-point, and smoothness overlay
-- `docs/assets/posture_sample.jpg`: posture-focused shoulder analysis
+- `docs/assets/posture_fallback_demo.gif`: automatic posture fallback when bow tracking is unreliable
 - `docs/assets/combined_sample.jpg`: combined posture + bow analysis
 
 ## Metrics in this version
@@ -117,6 +167,8 @@ The repository includes lightweight sample frames that show how the analyzer ada
 ### Shoulder elevation
 
 In clips where the shoulder region is visible, the sample analyzer can switch into a posture-focused overlay and flag visible bow-side shoulder tension cues. Right now this is a visual coaching layer rather than a full landmark-based measurement.
+
+If the clip does not support confident bow tracking, the analyzer automatically falls back to shoulder/posture-only feedback instead of forcing noisy bow metrics.
 
 Conceptually, shoulder elevation is the vertical rise of the shoulder above a relaxed baseline:
 
@@ -133,7 +185,7 @@ if shoulder_baseline_y is None:
 shoulder_elevation = max(0.0, shoulder_baseline_y - shoulder.y)
 ```
 
-<img src="docs/assets/posture_sample.jpg" alt="Shoulder posture sample" width="480" />
+<img src="docs/assets/posture_fallback_demo.gif" alt="Automatic posture fallback demo" width="480" />
 
 ### Bow-arm angle
 
@@ -221,4 +273,5 @@ Based on those papers, and keeping in mind that they mostly study violin rather 
 - Expand the metric set toward the MetaBow parameter space: bow speed, bow tilt, bow-bridge distance, bow-force proxies, and finger-pressure proxies where possible.
 - Run camera-placement experiments to determine which viewpoints best recover those parameters from vision alone: front, front-right, and side views are the most obvious first candidates.
 - Validate the interface design itself, not just the tracking accuracy: check whether the feedback remains nonintrusive, easy to understand, and usable during normal practice without forcing the player to adapt to the tool.
-- If single-camera vision reaches its limit, add optional sensor fusion later rather than by default, keeping the core workflow low-cost and player-friendly.
+- If single-camera vision reaches its limit, add optional sensor fusion rather than making hardware mandatory, keeping the core workflow low-cost and player-friendly.
+- Prototype a lightweight sensor-fusion version with an `ESP32-C3` and a bow-mounted IMU, but keep that hardware path optional so the base workflow remains camera-only and easy to adopt.

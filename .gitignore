@@ -3,6 +3,10 @@ __pycache__/
 *.pyc
 .venv/
 .venv312/
+.venv312_gui/
+.pio/
+.vscode/
+bowsense_session.csv
 
 # Local media and generated outputs
 demo/
